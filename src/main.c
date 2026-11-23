@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "exam_session_conflicts.h"
-#include "exam_session_conflicts.c"
 
 FILE *open_input_file(const char *filename);
 
 int main(int argc, char *argv[]) {
-    /* TODO: complete the exam-session conflict detector. */
     if (argc != 2) {
-        fprintf(stderr, "Usage %s <sessions_file> \n", argv[0]);
+        fprintf(stderr, "Usage: %s <sessions_file>\n", argv[0]);
         return EXIT_FAILURE;
     }
 
@@ -16,15 +14,16 @@ int main(int argc, char *argv[]) {
     if (session_file == NULL) {
         return EXIT_FAILURE;
     }
-    Exam exam_session = {NULL, NULL, 0};
-    if (read_session_file(session_file, &exam_session) == 1) {
+
+    ExamSession session = {NULL, NULL, 0};
+    if (read_session_file(session_file, &session) != 0) {
         fclose(session_file);
         return EXIT_FAILURE;
     }
 
+    print_conflicts(&session);
 
-
-
+    destroy_session(&session);
     fclose(session_file);
     return EXIT_SUCCESS;
 }
